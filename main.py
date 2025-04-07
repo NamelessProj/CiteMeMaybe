@@ -28,13 +28,17 @@ GUILD_ID = discord.Object(id=os.getenv("GUILD_ID"))
 async def get_messages(interaction: discord.Interaction):
     channel = discord.utils.get(interaction.guild.channels, name=os.getenv("CHANNEL_NAME"))
     if channel is None:
-        await interaction.message.channel.send('Channel not found')
+        await interaction.response.send_message('Channel not found')
         return
 
     msgs = [message async for message in channel.history(limit=1000)]
     for message in msgs:
-        print(f'${message.author.name}: {message.content}')
+        content = message.content
+        for mention in message.mentions:
+            content = content.replace(f'<@{mention.id}>', mention.name)
 
-    await interaction.message.channel.send('All messages found')
+        print(f'{message.author.name}: {content}')
+
+    await interaction.response.send_message('All messages found')
 
 client.run(os.getenv('BOT_TOKEN'))
