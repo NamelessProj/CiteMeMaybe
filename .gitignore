@@ -2,4 +2,9 @@
 /.idea
 /.vscode
 
+# Virtual environment
+/env
+/venv
+
+# Environment variables
 .env
