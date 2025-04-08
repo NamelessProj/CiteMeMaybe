@@ -10,6 +10,20 @@ load_dotenv()
 # Getting the guild ID from the environment variable
 GUILD_ID = discord.Object(id=os.getenv("GUILD_ID"))
 
+def replacing_mentions(message: discord.Message):
+    """
+    This function replaces mentions in the message with their names.
+    :param message: The message to process
+    :return: The processed message
+    """
+    content = message.content
+
+    # Replacing mentions with their names
+    for mention in message.mentions:
+        content = content.replace(f'<@{mention.id}>', mention.name)
+
+    return content
+
 # Define the bot client
 class Client(commands.Bot):
     async def on_ready(self):
@@ -40,11 +54,7 @@ async def get_messages(interaction: discord.Interaction):
     # Fetching messages from the channel history
     msgs = [message async for message in channel.history(limit=1000)]
     for message in msgs:
-        content = message.content
-
-        # Replacing mentions with their names
-        for mention in message.mentions:
-            content = content.replace(f'<@{mention.id}>', mention.name)
+        content = replacing_mentions(message)
 
         print(f'{message.author.name}: {content}')
 
