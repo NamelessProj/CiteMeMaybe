@@ -10,9 +10,13 @@ To be able to use this exemple bot, you'll need a `.env` file.
 ```env
 BOT_TOKEN=Your_Bot_Token
 GUILD_ID=Your_Server_Id
-CHANNEL_NAME=The_Name_Of_Your_Channel
+CHANNEL_ID=The_Id_Of_Your_Citation_Channel
 ```
-The `CHANNEL_NAME` will be used to gather the citations.
+The `BOT_TOKEN` will be used to connect the bot to your server.
+
+The `GUILD_ID` will be used to get the server where the bot is connected and to get the channel where the citations are.
+
+The `CHANNEL_ID` will be used to gather the citations from the channel and save them in the database.
 
 ## Dependencies
 - discord.py
