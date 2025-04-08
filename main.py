@@ -6,14 +6,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+GUILD_ID = discord.Object(id=os.getenv("GUILD_ID"))
+
 class Client(commands.Bot):
     async def on_ready(self):
         print(f'Logged on as {self.user}!')
 
         try:
-            guild = discord.Object(id=os.getenv("GUILD_ID"))
-            synced = await self.tree.sync(guild=guild)
-            print(f'Synced {len(synced)} commands to guild {guild.id}')
+            synced = await self.tree.sync(guild=GUILD_ID)
+            print(f'Synced {len(synced)} commands to guild {GUILD_ID.id}')
 
         except Exception as e:
             print(f'Error syncing commands: {e}')
@@ -21,8 +22,6 @@ class Client(commands.Bot):
 intents = discord.Intents.default()
 intents.message_content = True
 client = Client(command_prefix="!", intents=intents)
-
-GUILD_ID = discord.Object(id=os.getenv("GUILD_ID"))
 
 @client.tree.command(name="get_messages", description="Getting all messages", guild=GUILD_ID)
 async def get_messages(interaction: discord.Interaction):
