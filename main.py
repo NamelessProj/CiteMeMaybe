@@ -56,14 +56,16 @@ class Client(commands.Bot):
             # Deleting the citation from the database
             delete_citation_from_db(message.id)
 
+
 # Define the intents
 intents = discord.Intents.default()
 intents.message_content = True
 client = Client(command_prefix="!", intents=intents)
 
+
 # Command to get all messages from a specific channel
-@client.tree.command(name="get_messages", description="Getting all messages", guild=GUILD_ID)
-async def get_messages(interaction: discord.Interaction):
+@client.tree.command(name="updating_database", description="Updating the database with all the messages from the channel", guild=GUILD_ID)
+async def updating_database(interaction: discord.Interaction):
     # Getting the channel using an ID from the environment variable
     channel = client.get_channel(int(os.getenv("CHANNEL_ID")))
     if channel is None:
@@ -79,6 +81,7 @@ async def get_messages(interaction: discord.Interaction):
     # Sending a response to the interaction at the end of the command
     success_embed = discord.Embed(title="All the messages were found", description="I have fetched all the messages from the channel.", color=discord.Color.green())
     await interaction.response.send_message(embed=success_embed)
+
 
 @client.tree.command(name="get_random_citation", description="Getting a random citation", guild=GUILD_ID)
 async def get_random_citation(interaction: discord.Interaction):
