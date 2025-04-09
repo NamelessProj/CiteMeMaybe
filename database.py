@@ -16,6 +16,7 @@ def get_database():
     db = client[os.getenv('MONGO_DB_NAME')]
     return db
 
+
 def insert_citation_to_db(message: discord.Message):
     """
     This function inserts the citation to the database.
@@ -60,6 +61,55 @@ def insert_citation_to_db(message: discord.Message):
 
     # Inserting the citation data into the database
     collection.insert_one(citation_data)
+
+
+def edit_citation_in_db(message: discord.Message):
+    """
+    This function edits the citation in the database.
+    :param message: The message to process
+    :return: None
+    """
+    # Getting the citation ID
+    citation_id = message.id
+
+    # Getting the database and collection
+    db = get_database()
+    collection = db["citation"]
+
+    # Replacing mentions in the message with their names
+    content = replacing_mentions(message)
+
+    # Removing mentions from the message
+    content_without_mentions = remove_mentions(message)
+
+    # Extracting mentions from the message
+    all_mentions = extract_mentions(message)
+
+    # Preparing the citation data
+    citation_data = {
+        "content": content,
+        "content_without_mentions": content_without_mentions,
+        "mentions": all_mentions,
+        "timestamp": message.created_at
+    }
+
+    # Updating the citation data in the database
+    collection.update_one({"citation_id": citation_id}, {"$set": citation_data})
+
+
+def delete_citation_from_db(citation_id: int):
+    """
+    This function deletes a citation from the database.
+    :param citation_id: The ID of the citation to delete
+    :return: None
+    """
+    # Getting the database and collection
+    db = get_database()
+    collection = db["citation"]
+
+    # Deleting the citation from the database
+    collection.delete_one({"citation_id": citation_id})
+
 
 def get_random_citation_from_db(guild_id: int):
     """
