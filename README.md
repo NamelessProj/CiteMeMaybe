@@ -47,5 +47,8 @@ pip install -r requirements.txt
 ```
 
 ## Commands
-### `/get_messages`
-This command let you update the database with all the messages that might not have been saved.
+### `/updating_database`
+This command will update the database with the citations from the channel.
+
+### `/get_random_citation`
+This command let you get a random citation from the database.
