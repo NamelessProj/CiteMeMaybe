@@ -4,7 +4,8 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 
-from database import insert_citation_to_db
+from database import insert_citation_to_db, get_random_citation_from_db
+from utils import get_random_color_seeded
 
 # Load environment variables
 load_dotenv()
@@ -48,6 +49,39 @@ async def get_messages(interaction: discord.Interaction):
     # Sending a response to the interaction at the end of the command
     success_embed = discord.Embed(title="All the messages were found", description="I have fetched all the messages from the channel.", color=discord.Color.green())
     await interaction.response.send_message(embed=success_embed)
+
+@client.tree.command(name="get_random_citation", description="Getting a random citation", guild=GUILD_ID)
+async def get_random_citation(interaction: discord.Interaction):
+    # Getting a random citation from the database
+    citation = get_random_citation_from_db()
+
+    # Checking if the citation is None
+    if citation is None:
+        error_embed = discord.Embed(title="No citations found", description="Sorry, I couldn't find any citations.", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+        return
+
+    # Preparing the mentions string
+    all_mentions_string = ""
+    for mention in citation["mentions"]:
+        mention_id = mention["id"]
+        all_mentions_string += f"<@{mention_id}>, "
+
+    # Removing the last comma and space
+    all_mentions_string = all_mentions_string[:-2]
+
+    # Generating a random color based on the citation ID
+    color = get_random_color_seeded(citation["citation_id"])
+
+    # Creating an embed with the citation data
+    embed = discord.Embed(title="Random Citation", description=citation["content_without_mentions"], color=color)
+    embed.add_field(name="Who said it?", value=all_mentions_string, inline=True)
+    embed.add_field(name="Who write it?", value=f"<@{citation['author']['id']}>", inline=True)
+    embed.set_footer(text=f"Citation ID: {citation['citation_id']}")
+    embed.timestamp = citation["timestamp"]
+
+    # Sending the embed as a response to the interaction
+    await interaction.response.send_message(embed=embed)
 
 # Run the bot
 client.run(os.getenv('BOT_TOKEN'))
