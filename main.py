@@ -52,8 +52,11 @@ async def get_messages(interaction: discord.Interaction):
 
 @client.tree.command(name="get_random_citation", description="Getting a random citation", guild=GUILD_ID)
 async def get_random_citation(interaction: discord.Interaction):
+    # Getting the guild ID from the interaction
+    guild_id = interaction.guild.id
+
     # Getting a random citation from the database
-    citation = get_random_citation_from_db()
+    citation = get_random_citation_from_db(guild_id)
 
     # Checking if the citation is None
     if citation is None:
