@@ -28,7 +28,8 @@ def extract_mentions(message: discord.Message):
     for mention in mentions:
         result.append({
             "name": mention.name,
-            "id": mention.id
+            "id": mention.id,
+            "avatar": mention.display_avatar.url
         })
 
     return result
