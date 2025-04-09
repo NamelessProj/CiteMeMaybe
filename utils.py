@@ -24,6 +24,7 @@ def extract_mentions(message: discord.Message):
     """
     result = []
 
+    # Extracting mentions from the message
     mentions = message.mentions
     for mention in mentions:
         result.append({
@@ -31,6 +32,9 @@ def extract_mentions(message: discord.Message):
             "id": mention.id,
             "avatar": mention.display_avatar.url
         })
+
+    # Reversing the list to keep the order of mentions
+    result = result[::-1]
 
     return result
 
