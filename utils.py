@@ -51,3 +51,18 @@ def remove_mentions(message: discord.Message):
     content = re.sub(r'-(\s*,?)*$', '', content, 1)
 
     return content.strip()
+
+
+def get_random_color_seeded(seed: str):
+    """
+    This function generates a random color based on a seed.
+    :param seed: The seed to generate the color
+    :return: The generated color
+    """
+    # Hashing the seed to get a number
+    hash_value = hash(seed)
+
+    # Generating a color from the hash value
+    color = discord.Color.from_rgb((hash_value & 0xFF0000) >> 16, (hash_value & 0x00FF00) >> 8, hash_value & 0x0000FF)
+
+    return color
