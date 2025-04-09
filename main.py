@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 
-from utils import replacing_mentions, extract_mentions, remove_mentions
+from database import insert_citation_to_db
 
 # Load environment variables
 load_dotenv()
@@ -43,21 +43,7 @@ async def get_messages(interaction: discord.Interaction):
     # Fetching messages from the channel history
     msgs = [message async for message in channel.history(limit=1000)]
     for message in msgs:
-        # Replacing mentions in the message with their names
-        content = replacing_mentions(message)
-
-        # Removing mentions from the message
-        content_without_mentions = remove_mentions(message)
-
-        # Extracting mentions from the message
-        all_mentions = extract_mentions(message)
-
-        print(f'{message.author.name}: {content}')
-        print(f'Content without mentions: {content_without_mentions}')
-        if all_mentions:
-            print(f'Mentions: {", ".join([f"{mention["name"]} ({mention["id"]})" for mention in all_mentions])}')
-
-        print('')
+        insert_citation_to_db(message)
 
     # Sending a response to the interaction at the end of the command
     success_embed = discord.Embed(title="All the messages were found", description="I have fetched all the messages from the channel.", color=discord.Color.green())
