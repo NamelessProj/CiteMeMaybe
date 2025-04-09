@@ -61,7 +61,7 @@ def insert_citation_to_db(message: discord.Message):
     # Inserting the citation data into the database
     collection.insert_one(citation_data)
 
-def get_random_citation_from_db():
+def get_random_citation_from_db(guild_id: int):
     """
     This function gets a random citation from the database.
     :return: The citation data
@@ -71,6 +71,9 @@ def get_random_citation_from_db():
     collection = db["citation"]
 
     # Getting a random citation from the database
-    citation = collection.aggregate([{"$sample": {"size": 1}}]).next()
+    citation = collection.aggregate([
+        {"$match": {"guild_id": guild_id}},
+        {"$sample": {"size": 1}}
+    ]).next()
 
     return citation
