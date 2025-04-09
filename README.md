@@ -25,9 +25,26 @@ The `MONGO_URI` will be used to connect to your mongoDB database.
 
 The `MONGO_DB_NAME` will be used to get the database name where the citations will be saved.
 
-## Dependencies
-- discord.py
-- python-dotenv
+## How to run the bot
+1. Clone the repository
+```bash
+git clone https://github.com/NamelessProj/CiteMeMaybe.git
+```
+2. Create a virtual environment
+```bash
+python -m venv venv
+```
+3. Activate the virtual environment
+```bash
+# Windows
+venv\Scripts\activate
+# Linux
+source venv/bin/activate
+```
+4. Install the dependencies
+```bash
+pip install -r requirements.txt
+```
 
 ## Commands
 ### `/get_messages`
