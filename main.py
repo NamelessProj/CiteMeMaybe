@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 
-from database import insert_citation_to_db, get_random_citation_from_db
+from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db
 from utils import get_random_color_seeded
 
 # Load environment variables
@@ -25,6 +25,36 @@ class Client(commands.Bot):
 
         except Exception as e:
             print(f'Error syncing commands: {e}')
+
+    async def on_message(self, message):
+        # Ignore messages from the bot itself
+        if message.author == self.user:
+            return
+
+        # Checking if the message is in the channel specified in the environment variable
+        if message.channel.id == int(os.getenv("CHANNEL_ID")):
+            # Inserting the citation to the database
+            insert_citation_to_db(message)
+
+    async def on_message_edit(self, before, after):
+        # Ignore messages from the bot itself
+        if before.author == self.user:
+            return
+
+        # Checking if the message is in the channel specified in the environment variable
+        if before.channel.id == int(os.getenv("CHANNEL_ID")):
+            # Inserting the citation to the database
+            edit_citation_in_db(after)
+
+    async def on_message_delete(self, message):
+        # Ignore messages from the bot itself
+        if message.author == self.user:
+            return
+
+        # Checking if the message is in the channel specified in the environment variable
+        if message.channel.id == int(os.getenv("CHANNEL_ID")):
+            # Deleting the citation from the database
+            delete_citation_from_db(message.id)
 
 # Define the intents
 intents = discord.Intents.default()
