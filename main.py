@@ -5,6 +5,7 @@ from discord import app_commands
 from dotenv import load_dotenv
 
 from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db
+from server_settings import setup_server_settings
 from utils import get_random_color_seeded
 
 # Load environment variables
@@ -118,6 +119,40 @@ async def get_random_citation(interaction: discord.Interaction):
 
     # Sending the embed as a response to the interaction
     await interaction.response.send_message(embed=embed)
+
+
+@client.tree.command(name="setup_server", description="Setting up the server settings", guild=GUILD_ID)
+@app_commands.checks.has_permissions(administrator=True)
+@app_commands.describe(citation_channel="The channel in which the bot will gather citations", bot_channel="The channel in which the bot will send messages")
+async def setup_server(interaction: discord.Interaction, citation_channel: discord.TextChannel, bot_channel: discord.TextChannel = None):
+    # Getting the guild ID from the interaction
+    guild_id = interaction.guild.id
+
+    # Setting up the server settings in the database
+    server_settings = setup_server_settings(guild_id, citation_channel.id, bot_channel.id if bot_channel else None)
+
+    # Checking if the server settings were set up successfully
+    if server_settings is None:
+        error_embed = discord.Embed(title="An error occur", description="Sorry, I couldn't set up the server settings. Something unexpected happened.", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+        return
+
+    # Sending a response to the interaction at the end of the command
+    success_embed = discord.Embed(title="Server settings set up", description="I have set up the server settings.", color=discord.Color.green())
+    await interaction.response.send_message(embed=success_embed)
+
+
+@setup_server.error
+async def setup_server_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
+    # Checking if the error is a MissingPermissions error
+    if isinstance(error, app_commands.MissingPermissions):
+        error_embed = discord.Embed(title="Missing permissions", description="Sorry, you don't have permission to use this command.", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+    else:
+        # Sending a generic error message
+        error_embed = discord.Embed(title="An error occur", description="Sorry, I couldn't set up the server settings. Something unexpected happened.", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+
 
 # Run the bot
 client.run(os.getenv('BOT_TOKEN'))
