@@ -89,23 +89,25 @@ intents.message_content = True
 client = Client(command_prefix="!", intents=intents)
 
 
-# Command to get all messages from a specific channel
-@client.tree.command(name="updating_database", description="Updating the database with all the messages from the channel", guild=GUILD_ID)
+@client.tree.command(name="update_database", description="Updating the database with all the messages from the channel", guild=GUILD_ID)
 @app_commands.checks.has_permissions(administrator=True)
-async def updating_database(interaction: discord.Interaction):
+async def update_database(interaction: discord.Interaction):
+    # Letting Discord know that we are processing the command
+    await interaction.response.defer()
+
     # Getting the server settings from the database
     server_settings = get_server_settings(interaction.guild.id)
 
     if server_settings is None:
         error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
-        await interaction.response.send_message(embed=error_embed)
+        await interaction.followup.send(embed=error_embed)
         return
 
     # Getting the channel using an ID from the environment variable
-    channel = client.get_channel(server_settings["citation_channel_id"])
+    channel = interaction.client.get_channel(server_settings["citation_channel_id"])
     if channel is None:
         error_embed = discord.Embed(title="Channel not found", description="Sorry, I couldn't find the channel.", color=discord.Color.red())
-        await interaction.response.send_message(embed=error_embed)
+        await interaction.followup.send(embed=error_embed)
         return
 
     # Fetching messages from the channel history
@@ -115,7 +117,7 @@ async def updating_database(interaction: discord.Interaction):
 
     # Sending a response to the interaction at the end of the command
     success_embed = discord.Embed(title="All the messages were found", description="I have fetched all the messages from the channel.", color=discord.Color.green())
-    await interaction.response.send_message(embed=success_embed)
+    await interaction.followup.send(embed=success_embed)
 
 
 @client.tree.command(name="random_citation", description="Getting a random citation", guild=GUILD_ID)
@@ -233,7 +235,7 @@ async def help_command(interaction: discord.Interaction):
     embed.add_field(name="/how_many", value="Get the number of citations total or for a specific user.", inline=False)
     embed.add_field(name="/get_a_citation", value="Get a citation by an ID.", inline=False)
     embed.add_field(name="/setup_server", value="Set up the server settings. Only available for administrators.", inline=False)
-    embed.add_field(name="/updating_database", value="Update the database with all the messages from the channel. Only available for administrators.", inline=False)
+    embed.add_field(name="/update_database", value="Update the database with all the messages from the channel. Only available for administrators.", inline=False)
     embed.add_field(name="/help", value="Get help with the bot commands.", inline=False)
     embed.add_field(name="How not to save a message?", value="To not save a message, start the message with `no-saving`. You have to put it in a code block.", inline=False)
 
