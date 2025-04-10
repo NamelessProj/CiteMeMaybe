@@ -1,11 +1,27 @@
-# CiteMeMaybe
-CiteMeMaybe is a Discord bot written in python that will gather all your citations from your citations channel and save them in a database.
+# CiteMeMaybe - 🎤 Save the legendary moments.
+CiteMeMaybe automatically logs every message from a designated channel and stores it as a citation. Whether it’s hilarious, out of pocket, or pure gold—you’ll never lose a quote again.
 
-You'll have to set up your mongoDB database as the project only doesn't give you one.
+## 🛠️ Features:
+__Auto-log messages__ from a specified channel as citations.
 
-I used `Python 3.12.6`.
+__Random citation__ generator (from anyone or specific users).
 
-## .env
+__Stats commands__ – total citations, user-specific counts, and more.
+
+__Citation lookup__ by ID, in case someone really wants to deny it.
+
+## 🤝 Perfect for:
+Friend groups who say way too much.
+
+Servers that run on inside jokes.
+
+Anyone who needs proof that “yes, you did say that.”
+
+> 💬 __Save it. Quote it. Laugh at it later.__
+> 
+> 📚 __Powered by friendship and bad takes.__
+
+## 📊 .env
 To be able to use this exemple bot, you'll need a `.env` file.
 ```env
 BOT_TOKEN=Your_Bot_Token
@@ -25,7 +41,7 @@ The `MONGO_URI` will be used to connect to your mongoDB database.
 
 The `MONGO_DB_NAME` will be used to get the database name where the citations will be saved.
 
-## How to run the bot
+## 🤖 How to run the bot
 1. Clone the repository
 ```bash
 git clone https://github.com/NamelessProj/CiteMeMaybe.git
@@ -46,17 +62,17 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Automations
+## 🚗 Automations
 Every time a message is sent in the channel, the bot will check if the message is a citation and if it is, it will save it in the database.
 
 When a message is deleted, the bot will check if the message is a citation and if it is, it will delete it from the database.
 
 When a message is edited, the bot will check if the message is a citation and if it is, it will update it in the database.
 
-## How to prevent messages from being saved
+## ❌ How to prevent messages from being saved
 Before sending a message in the channel, add at the beginning of the message `no-saving`. It has to be in a code block.
 
-## Commands
+## 🎮 Commands
 ### `/help`
 This command will give you a list of all the commands available.
 
