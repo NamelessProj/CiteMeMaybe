@@ -90,11 +90,14 @@ def setup_citation_embed(citation):
     # Generating a random color based on the citation ID
     color = get_random_color_seeded(citation["citation_id"])
 
+    author_id = citation["author"]["id"]
+    citation_id = citation["citation_id"]
+
     # Creating an embed with the citation data
     embed = discord.Embed(title="Citation", description=citation["content_without_mentions"], color=color)
     embed.add_field(name="Who said it?", value=all_mentions_string, inline=True)
-    embed.add_field(name="Who write it?", value=f"<@{citation['author']['id']}>", inline=True)
-    embed.set_footer(text=f"Citation ID: {citation['citation_id']}")
+    embed.add_field(name="Who write it?", value=f"<@{author_id}>", inline=True)
+    embed.set_footer(text=f"Citation ID: {citation_id}")
     embed.timestamp = citation["timestamp"]
 
     return {
