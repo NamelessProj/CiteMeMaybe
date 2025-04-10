@@ -37,7 +37,6 @@ def insert_citation_to_db(message: discord.Message):
 
     # Checking if the citation already exists in the database
     if collection.find_one({"citation_id": citation_id}):
-        print(f"Message with ID {citation_id} already exists in the database.")
         return
 
     # Replacing mentions in the message with their names
