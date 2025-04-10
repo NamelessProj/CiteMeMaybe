@@ -1,5 +1,6 @@
 from database import get_database
 
+
 def setup_server_settings(guild_id: int, citation_channel_id: int):
     """
     This function sets up the server settings in the database.
