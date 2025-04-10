@@ -231,6 +231,7 @@ async def help_command(interaction: discord.Interaction):
     embed.add_field(name="/random_citation", value="Get a random citation from the database or for a specific user.", inline=False)
     embed.add_field(name="/how_many", value="Get the number of citations total or for a specific user.", inline=False)
     embed.add_field(name="/updating_database", value="Update the database with all the messages from the channel.", inline=False)
+    embed.add_field(name="/get_a_citation", value="Get a citation by an ID.", inline=False)
     embed.add_field(name="/setup_server", value="Set up the server settings. Only for administrators.", inline=False)
     embed.add_field(name="/help", value="Get help with the bot commands.", inline=False)
     embed.add_field(name="How not to save a message?", value="To not save a message, start the message with `no-saving`. You have to put it in a code block.", inline=False)
