@@ -158,13 +158,15 @@ async def how_many(interaction: discord.Interaction, user: discord.User = None):
 
     # Getting the number of citations from the database
     citation_count = get_citation_count(guild_id, user.id if user else None)
-    "{: }".format(citation_count)
+
+    # Formatting the citation count with spaces instead of commas for thousands separators
+    count_str = f"{citation_count:,}".replace(",", " ")
 
     # Getting the number of citations from the database
     if user is None:
-        response_message = f"There are {citation_count} citation{"s" if citation_count > 1 else ""} in total."
+        response_message = f"There are **{count_str}** citation{"s" if citation_count > 1 else ""} in total."
     else:
-        response_message = f"There are {citation_count} citation{"s" if citation_count > 1 else ""} for {user.mention}."
+        response_message = f"There are **{count_str}** citation{"s" if citation_count > 1 else ""} for {user.mention}."
 
     # Sending a response to the interaction at the end of the command
     await interaction.response.send_message(response_message)
