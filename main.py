@@ -237,8 +237,9 @@ async def help_command(interaction: discord.Interaction):
     embed.add_field(name="How not to save a message?", value=f"To not save a message, start the message with {no_saving}. You have to put it in a code block!", inline=False)
 
     for command in CONSTANTS["all_commands"]:
+        command_name = command["name"]
         embed.add_field(name="", value="")
-        embed.add_field(name=f"`/{command["name"]}`", value=command["description"], inline=False)
+        embed.add_field(name=f"`/{command_name}`", value=command["description"], inline=False)
 
     # Sending the embed as a response to the interaction
     await interaction.response.send_message(embed=embed)
