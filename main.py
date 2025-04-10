@@ -91,6 +91,7 @@ client = Client(command_prefix="!", intents=intents)
 
 # Command to get all messages from a specific channel
 @client.tree.command(name="updating_database", description="Updating the database with all the messages from the channel", guild=GUILD_ID)
+@app_commands.checks.has_permissions(administrator=True)
 async def updating_database(interaction: discord.Interaction):
     # Getting the server settings from the database
     server_settings = get_server_settings(interaction.guild.id)
@@ -230,9 +231,9 @@ async def help_command(interaction: discord.Interaction):
     embed = discord.Embed(title="Help", description="Here are the commands you can use:", color=discord.Color.blue())
     embed.add_field(name="/random_citation", value="Get a random citation from the database or for a specific user.", inline=False)
     embed.add_field(name="/how_many", value="Get the number of citations total or for a specific user.", inline=False)
-    embed.add_field(name="/updating_database", value="Update the database with all the messages from the channel.", inline=False)
     embed.add_field(name="/get_a_citation", value="Get a citation by an ID.", inline=False)
-    embed.add_field(name="/setup_server", value="Set up the server settings. Only for administrators.", inline=False)
+    embed.add_field(name="/setup_server", value="Set up the server settings. Only available for administrators.", inline=False)
+    embed.add_field(name="/updating_database", value="Update the database with all the messages from the channel. Only available for administrators.", inline=False)
     embed.add_field(name="/help", value="Get help with the bot commands.", inline=False)
     embed.add_field(name="How not to save a message?", value="To not save a message, start the message with `no-saving`. You have to put it in a code block.", inline=False)
 
