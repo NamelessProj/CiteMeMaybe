@@ -108,7 +108,7 @@ async def updating_database(interaction: discord.Interaction):
     await interaction.response.send_message(embed=success_embed)
 
 
-@client.tree.command(name="get_random_citation", description="Getting a random citation", guild=GUILD_ID)
+@client.tree.command(name="random_citation", description="Getting a random citation", guild=GUILD_ID)
 async def get_random_citation(interaction: discord.Interaction):
     # Getting the guild ID from the interaction
     guild_id = interaction.guild.id
