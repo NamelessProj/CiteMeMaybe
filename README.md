@@ -46,9 +46,32 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Automations
+Every time a message is sent in the channel, the bot will check if the message is a citation and if it is, it will save it in the database.
+
+When a message is deleted, the bot will check if the message is a citation and if it is, it will delete it from the database.
+
+When a message is edited, the bot will check if the message is a citation and if it is, it will update it in the database.
+
+## How to prevent messages from being saved
+Before sending a message in the channel, add at the beginning of the message `no-saving`. It has to be in a code block.
+
 ## Commands
+### `/help`
+This command will give you a list of all the commands available.
+
+### `/setup_server`
+__This command is only available to the administrators.__
+
+This command will set up the server and the channel where it'll find the citations.
+
 ### `/updating_database`
 This command will update the database with the citations from the channel.
 
 ### `/get_random_citation`
 This command let you get a random citation from the database.
+
+### `/how_many`
+This command let you get the number of citations in the database or the number of citations from a specific user.
+#### Parameters:
+- `user`: _optional_
