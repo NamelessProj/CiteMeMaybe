@@ -4,7 +4,8 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 
-from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db
+from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, \
+    get_citation_count
 from server_settings import setup_server_settings, get_server_settings
 from utils import get_random_color_seeded
 
@@ -153,6 +154,34 @@ async def get_random_citation(interaction: discord.Interaction):
     await interaction.response.send_message("- "+all_mentions_string+"\n", embed=embed)
 
 
+@client.tree.command(name="how_many", description="Getting the number of citations total or for a specific user", guild=GUILD_ID)
+@app_commands.describe(user="The user to get the number of citations for")
+async def how_many(interaction: discord.Interaction, user: discord.User = None):
+    # Getting the guild ID from the interaction
+    guild_id = interaction.guild.id
+
+    # Getting the server settings from the database
+    server_settings = get_server_settings(guild_id)
+
+    if server_settings is None:
+        error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+        return
+
+    # Getting the number of citations from the database
+    citation_count = get_citation_count(guild_id, user.id if user else None)
+    "{: }".format(citation_count)
+
+    # Getting the number of citations from the database
+    if user is None:
+        response_message = f"There are {citation_count} citation{"s" if citation_count > 1 else ""} in total."
+    else:
+        response_message = f"There are {citation_count} citation{"s" if citation_count > 1 else ""} for {user.mention}."
+
+    # Sending a response to the interaction at the end of the command
+    await interaction.response.send_message(response_message)
+
+
 @client.tree.command(name="setup_server", description="Setting up the server settings. Only for administrators", guild=GUILD_ID)
 @app_commands.checks.has_permissions(administrator=True)
 @app_commands.describe(citation_channel="The channel in which the bot will gather citations")
@@ -179,6 +208,7 @@ async def help_command(interaction: discord.Interaction):
     # Creating an embed with the help information
     embed = discord.Embed(title="Help", description="Here are the commands you can use:", color=discord.Color.blue())
     embed.add_field(name="/random_citation", value="Get a random citation from the database.", inline=False)
+    embed.add_field(name="/how_many", value="Get the number of citations total or for a specific user.", inline=False)
     embed.add_field(name="/updating_database", value="Update the database with all the messages from the channel.", inline=False)
     embed.add_field(name="/setup_server", value="Set up the server settings. Only for administrators.", inline=False)
     embed.add_field(name="/help", value="Get help with the bot commands.", inline=False)
