@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 from citations import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, \
     get_citation_count, get_random_citation_from_user, get_citation_from_db
+from constants import CONSTANTS
 from server_settings import setup_server_settings, get_server_settings
 from utils import setup_citation_embed
 
@@ -227,13 +228,11 @@ async def setup_server(interaction: discord.Interaction, citation_channel: disco
 async def help_command(interaction: discord.Interaction):
     # Creating an embed with the help information
     embed = discord.Embed(title="Help", description="Here are the commands you can use:", color=discord.Color.blue())
-    embed.add_field(name="/random_citation", value="Get a random citation from the database or for a specific user.", inline=False)
-    embed.add_field(name="/how_many", value="Get the number of citations total or for a specific user.", inline=False)
-    embed.add_field(name="/get_a_citation", value="Get a citation by an ID.", inline=False)
-    embed.add_field(name="/setup_server", value="Set up the server settings. Only available for administrators.", inline=False)
-    embed.add_field(name="/update_database", value="Update the database with all the messages from the channel. Only available for administrators.", inline=False)
-    embed.add_field(name="/help", value="Get help with the bot commands.", inline=False)
-    embed.add_field(name="How not to save a message?", value="To not save a message, start the message with `no-saving`. You have to put it in a code block.", inline=False)
+    embed.add_field(name="How not to save a message?", value=f"To not save a message, start the message with {CONSTANTS["no_saving"]}. You have to put it in a code block!", inline=False)
+
+    for command in CONSTANTS["all_commands"]:
+        embed.add_field(name="", value="")
+        embed.add_field(name=f"`/{command["name"]}`", value=command["description"], inline=False)
 
     # Sending the embed as a response to the interaction
     await interaction.response.send_message(embed=embed)
