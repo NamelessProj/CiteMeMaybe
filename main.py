@@ -4,10 +4,10 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 
-from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, \
+from citations import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, \
     get_citation_count, get_random_citation_from_user, get_citation_from_db
 from server_settings import setup_server_settings, get_server_settings
-from utils import get_random_color_seeded, setup_citation_embed
+from utils import setup_citation_embed
 
 # Load environment variables
 load_dotenv()
