@@ -214,7 +214,7 @@ async def setup_server(interaction: discord.Interaction, citation_channel: disco
 async def help_command(interaction: discord.Interaction):
     # Creating an embed with the help information
     embed = discord.Embed(title="Help", description="Here are the commands you can use:", color=discord.Color.blue())
-    embed.add_field(name="/random_citation", value="Get a random citation from the database.", inline=False)
+    embed.add_field(name="/random_citation", value="Get a random citation from the database or for a specific user.", inline=False)
     embed.add_field(name="/how_many", value="Get the number of citations total or for a specific user.", inline=False)
     embed.add_field(name="/updating_database", value="Update the database with all the messages from the channel.", inline=False)
     embed.add_field(name="/setup_server", value="Set up the server settings. Only for administrators.", inline=False)
