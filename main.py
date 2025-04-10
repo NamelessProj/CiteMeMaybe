@@ -37,8 +37,6 @@ class Client(commands.Bot):
         server_settings = get_server_settings(message.guild.id)
 
         if server_settings is None:
-            error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
-            await message.channel.send(embed=error_embed)
             return
 
         # Checking if the message is in the channel specified in the environment variable
@@ -55,11 +53,9 @@ class Client(commands.Bot):
         server_settings = get_server_settings(after.guild.id)
 
         if server_settings is None:
-            error_embed = discord.Embed(title="Server settings not found",description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.",color=discord.Color.red())
-            await after.channel.send(embed=error_embed)
             return
 
-        # Checking if the message is in the channel specified in the environment variable
+        # Checking if the message is in the channel specified in database
         if before.channel.id == server_settings["citation_channel_id"]:
             # Inserting the citation to the database
             edit_citation_in_db(after)
@@ -73,8 +69,6 @@ class Client(commands.Bot):
         server_settings = get_server_settings(message.guild.id)
 
         if server_settings is None:
-            error_embed = discord.Embed(title="Server settings not found",description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.",color=discord.Color.red())
-            await message.channel.send(embed=error_embed)
             return
 
         # Checking if the message is in the channel specified in the environment variable
