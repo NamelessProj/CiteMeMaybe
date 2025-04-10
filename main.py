@@ -229,9 +229,12 @@ async def setup_server(interaction: discord.Interaction, citation_channel: disco
 
 @client.tree.command(name="help", description="Getting help", guild=GUILD_ID)
 async def help_command(interaction: discord.Interaction):
+    # Getting the string for not saving a message
+    no_saving = CONSTANTS["no_saving"]
+
     # Creating an embed with the help information
     embed = discord.Embed(title="Help", description="Here are the commands you can use:", color=discord.Color.blue())
-    embed.add_field(name="How not to save a message?", value=f"To not save a message, start the message with {CONSTANTS["no_saving"]}. You have to put it in a code block!", inline=False)
+    embed.add_field(name="How not to save a message?", value=f"To not save a message, start the message with {no_saving}. You have to put it in a code block!", inline=False)
 
     for command in CONSTANTS["all_commands"]:
         embed.add_field(name="", value="")
