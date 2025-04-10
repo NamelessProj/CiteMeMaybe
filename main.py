@@ -4,9 +4,10 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 
-from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, get_citation_count, get_random_citation_from_user
+from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, \
+    get_citation_count, get_random_citation_from_user, get_citation_from_db
 from server_settings import setup_server_settings, get_server_settings
-from utils import get_random_color_seeded
+from utils import get_random_color_seeded, setup_citation_embed
 
 # Load environment variables
 load_dotenv()
@@ -133,32 +134,15 @@ async def get_random_citation(interaction: discord.Interaction, user: discord.Us
         error_embed = discord.Embed(title="The user has no citations", description=f"Sorry, I couldn't find any citations for {user.mention}", color=discord.Color.red())
         await interaction.response.send_message(embed=error_embed)
         return
-    else:
+    elif citation is None:
         error_embed = discord.Embed(title="No citations found", description="Sorry, I couldn't find any citations.", color=discord.Color.red())
         await interaction.response.send_message(embed=error_embed)
         return
 
-    # Preparing the mentions string
-    all_mentions_string = ""
-    for mention in citation["mentions"]:
-        mention_id = mention["id"]
-        all_mentions_string += f"<@{mention_id}>, "
-
-    # Removing the last comma and space
-    all_mentions_string = all_mentions_string[:-2]
-
-    # Generating a random color based on the citation ID
-    color = get_random_color_seeded(citation["citation_id"])
-
-    # Creating an embed with the citation data
-    embed = discord.Embed(title="Random Citation", description=citation["content_without_mentions"], color=color)
-    embed.add_field(name="Who said it?", value=all_mentions_string, inline=True)
-    embed.add_field(name="Who write it?", value=f"<@{citation['author']['id']}>", inline=True)
-    embed.set_footer(text=f"Citation ID: {citation['citation_id']}")
-    embed.timestamp = citation["timestamp"]
+    embed = setup_citation_embed(citation)
 
     # Sending the embed as a response to the interaction
-    await interaction.response.send_message("- "+all_mentions_string+"\n", embed=embed)
+    await interaction.response.send_message("- "+embed["all_mentions_string"]+"\n", embed=embed["embed"])
 
 
 @client.tree.command(name="how_many", description="Getting the number of citations total or for a specific user", guild=GUILD_ID)
@@ -187,6 +171,36 @@ async def how_many(interaction: discord.Interaction, user: discord.User = None):
 
     # Sending a response to the interaction at the end of the command
     await interaction.response.send_message(response_message)
+
+
+@client.tree.command(name="get_a_citation", description="Getting a citation by an ID", guild=GUILD_ID)
+@app_commands.describe(citation_id="The ID (integer) of the citation to get")
+async def get_a_citation(interaction: discord.Interaction, citation_id: str):
+    # Getting the guild ID from the interaction
+    guild_id = interaction.guild.id
+
+    # Checking if the citation ID is valid
+    if not citation_id.isdigit():
+        error_embed = discord.Embed(title="Invalid citation ID", description="Sorry, the citation ID must be a number.", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+        return
+
+    # Converting the citation ID to an integer
+    citation_id = int(citation_id)
+
+    # Getting a citation from the database
+    citation = get_citation_from_db(guild_id, citation_id)
+
+    # Checking if there are a citation
+    if citation is None:
+        error_embed = discord.Embed(title="Citation not found", description="Sorry, I couldn't find any citations.", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+        return
+
+    embed = setup_citation_embed(citation)
+
+    # Sending the embed as a response to the interaction
+    await interaction.response.send_message("- "+embed["all_mentions_string"]+"\n", embed=embed["embed"])
 
 
 @client.tree.command(name="setup_server", description="Setting up the server settings. Only for administrators", guild=GUILD_ID)
