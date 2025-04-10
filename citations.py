@@ -1,5 +1,6 @@
 import discord
 
+from constants import CONSTANTS
 from database import get_database
 from utils import replacing_mentions, remove_mentions, extract_mentions
 
@@ -12,7 +13,7 @@ def insert_citation_to_db(message: discord.Message):
     """
     # Checking if the message start with the string "`no-saving`"
     # This is used to prevent saving messages that are not citations
-    if message.content.startswith("`no-saving`"):
+    if message.content.startswith(CONSTANTS["no_saving"]):
         return
 
     # Getting the citation ID
@@ -62,7 +63,7 @@ def edit_citation_in_db(message: discord.Message):
     """
     # Checking if the message start with the string "`no-saving`"
     # This is used to prevent saving messages that are not citations
-    if message.content.startswith("`no-saving`"):
+    if message.content.startswith(CONSTANTS["no_saving"]):
         return
 
     # Getting the citation ID
