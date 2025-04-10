@@ -91,15 +91,23 @@ client = Client(command_prefix="!", intents=intents)
 # Command to get all messages from a specific channel
 @client.tree.command(name="updating_database", description="Updating the database with all the messages from the channel", guild=GUILD_ID)
 async def updating_database(interaction: discord.Interaction):
+    # Getting the server settings from the database
+    server_settings = get_server_settings(interaction.guild.id)
+
+    if server_settings is None:
+        error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+        return
+
     # Getting the channel using an ID from the environment variable
-    channel = client.get_channel(int(os.getenv("CHANNEL_ID")))
+    channel = client.get_channel(server_settings["citation_channel_id"])
     if channel is None:
         error_embed = discord.Embed(title="Channel not found", description="Sorry, I couldn't find the channel.", color=discord.Color.red())
         await interaction.response.send_message(embed=error_embed)
         return
 
     # Fetching messages from the channel history
-    msgs = [message async for message in channel.history(limit=1000)]
+    msgs = [message async for message in channel.history(limit=server_settings["history_limit"])]
     for message in msgs:
         insert_citation_to_db(message)
 
@@ -147,13 +155,13 @@ async def get_random_citation(interaction: discord.Interaction):
 
 @client.tree.command(name="setup_server", description="Setting up the server settings. Only for administrators", guild=GUILD_ID)
 @app_commands.checks.has_permissions(administrator=True)
-@app_commands.describe(citation_channel="The channel in which the bot will gather citations", bot_channel="The channel in which the bot will send messages")
-async def setup_server(interaction: discord.Interaction, citation_channel: discord.TextChannel, bot_channel: discord.TextChannel = None):
+@app_commands.describe(citation_channel="The channel in which the bot will gather citations")
+async def setup_server(interaction: discord.Interaction, citation_channel: discord.TextChannel):
     # Getting the guild ID from the interaction
     guild_id = interaction.guild.id
 
     # Setting up the server settings in the database
-    server_settings = setup_server_settings(guild_id, citation_channel.id, bot_channel.id if bot_channel else None)
+    server_settings = setup_server_settings(guild_id, citation_channel.id)
 
     # Checking if the server settings were set up successfully
     if server_settings is None:
