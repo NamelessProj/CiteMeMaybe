@@ -139,6 +139,47 @@ def get_random_citation_from_db(guild_id: int):
     return citation
 
 
+def get_random_citation_from_user(guild_id: int, user_id: int):
+    """
+    This function gets a random citation from the database for a specific user.
+    :param guild_id: The ID of the guild
+    :param user_id: The ID of the user
+    :return: The citation data
+    """
+    # Getting the database and collection
+    db = get_database()
+    collection = db["citation"]
+
+    # Checking if the user has any citations
+    if not collection.count_documents({"guild_id": guild_id, "mentions.id": user_id}):
+        return None
+
+    # Getting a random citation from the database for the user
+    citation = collection.aggregate([
+        {"$match": {"guild_id": guild_id, "mentions.id": user_id}},
+        {"$sample": {"size": 1}}
+    ]).next()
+
+    return citation
+
+
+def get_citation_from_db(guild_id: int, citation_id: int):
+    """
+    This function gets a citation from the database.
+    :param guild_id: The ID of the guild
+    :param citation_id: The ID of the citation
+    :return: The citation data
+    """
+    # Getting the database and collection
+    db = get_database()
+    collection = db["citation"]
+
+    # Getting the citation from the database
+    citation = collection.find_one({"guild_id": guild_id, "citation_id": citation_id})
+
+    return citation
+
+
 def get_citation_count(guild_id: int, user_id: int = None):
     """
     This function gets the count of citations in the database or for a specific user (in mentions).
