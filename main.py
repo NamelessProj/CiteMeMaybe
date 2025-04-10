@@ -5,7 +5,7 @@ from discord import app_commands
 from dotenv import load_dotenv
 
 from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db
-from server_settings import setup_server_settings
+from server_settings import setup_server_settings, get_server_settings
 from utils import get_random_color_seeded
 
 # Load environment variables
@@ -32,8 +32,16 @@ class Client(commands.Bot):
         if message.author == self.user:
             return
 
+        # Getting the server settings from the database
+        server_settings = get_server_settings(message.guild.id)
+
+        if server_settings is None:
+            error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
+            await message.channel.send(embed=error_embed)
+            return
+
         # Checking if the message is in the channel specified in the environment variable
-        if message.channel.id == int(os.getenv("CHANNEL_ID")):
+        if message.channel.id == server_settings["citation_channel_id"]:
             # Inserting the citation to the database
             insert_citation_to_db(message)
 
@@ -42,8 +50,16 @@ class Client(commands.Bot):
         if before.author == self.user:
             return
 
+        # Getting the server settings from the database
+        server_settings = get_server_settings(after.guild.id)
+
+        if server_settings is None:
+            error_embed = discord.Embed(title="Server settings not found",description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.",color=discord.Color.red())
+            await after.channel.send(embed=error_embed)
+            return
+
         # Checking if the message is in the channel specified in the environment variable
-        if before.channel.id == int(os.getenv("CHANNEL_ID")):
+        if before.channel.id == server_settings["citation_channel_id"]:
             # Inserting the citation to the database
             edit_citation_in_db(after)
 
@@ -52,8 +68,16 @@ class Client(commands.Bot):
         if message.author == self.user:
             return
 
+        # Getting the server settings from the database
+        server_settings = get_server_settings(message.guild.id)
+
+        if server_settings is None:
+            error_embed = discord.Embed(title="Server settings not found",description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.",color=discord.Color.red())
+            await message.channel.send(embed=error_embed)
+            return
+
         # Checking if the message is in the channel specified in the environment variable
-        if message.channel.id == int(os.getenv("CHANNEL_ID")):
+        if message.channel.id == server_settings["citation_channel_id"]:
             # Deleting the citation from the database
             delete_citation_from_db(message.id)
 
