@@ -69,7 +69,9 @@ This command will set up the server and the channel where it'll find the citatio
 This command will update the database with the citations from the channel.
 
 ### `/get_random_citation`
-This command let you get a random citation from the database.
+This command let you get a random citation from the database or from a specific user.
+#### Parameters:
+- `user`: _optional_
 
 ### `/how_many`
 This command let you get the number of citations in the database or the number of citations from a specific user.
