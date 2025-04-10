@@ -145,7 +145,7 @@ async def get_random_citation(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 
-@client.tree.command(name="setup_server", description="Setting up the server settings", guild=GUILD_ID)
+@client.tree.command(name="setup_server", description="Setting up the server settings. Only for administrators", guild=GUILD_ID)
 @app_commands.checks.has_permissions(administrator=True)
 @app_commands.describe(citation_channel="The channel in which the bot will gather citations", bot_channel="The channel in which the bot will send messages")
 async def setup_server(interaction: discord.Interaction, citation_channel: discord.TextChannel, bot_channel: discord.TextChannel = None):
@@ -164,6 +164,20 @@ async def setup_server(interaction: discord.Interaction, citation_channel: disco
     # Sending a response to the interaction at the end of the command
     success_embed = discord.Embed(title="Server settings set up", description="I have set up the server settings.", color=discord.Color.green())
     await interaction.response.send_message(embed=success_embed)
+
+
+@client.tree.command(name="help", description="Getting help", guild=GUILD_ID)
+async def help_command(interaction: discord.Interaction):
+    # Creating an embed with the help information
+    embed = discord.Embed(title="Help", description="Here are the commands you can use:", color=discord.Color.blue())
+    embed.add_field(name="/random_citation", value="Get a random citation from the database.", inline=False)
+    embed.add_field(name="/updating_database", value="Update the database with all the messages from the channel.", inline=False)
+    embed.add_field(name="/setup_server", value="Set up the server settings. Only for administrators.", inline=False)
+    embed.add_field(name="/help", value="Get help with the bot commands.", inline=False)
+    embed.add_field(name="How not to save a message?", value="To not save a message, start the message with `no-saving`. You have to put it in a code block.", inline=False)
+
+    # Sending the embed as a response to the interaction
+    await interaction.response.send_message(embed=embed)
 
 
 @setup_server.error
