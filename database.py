@@ -137,3 +137,25 @@ def get_random_citation_from_db(guild_id: int):
     ]).next()
 
     return citation
+
+
+def get_citation_count(guild_id: int, user_id: int = None):
+    """
+    This function gets the count of citations in the database or for a specific user (in mentions).
+    :param guild_id: The ID of the guild
+    :param user_id: The ID of the user (optional)
+    :return: The count of citations
+    """
+    # Getting the database and collection
+    db = get_database()
+    collection = db["citation"]
+
+    # Checking if the user ID is provided
+    if user_id:
+        # Getting the count of citations for the user
+        count = collection.count_documents({"guild_id": guild_id, "mentions.id": user_id})
+    else:
+        # Getting the count of all citations
+        count = collection.count_documents({"guild_id": guild_id})
+
+    return count
