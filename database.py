@@ -23,6 +23,11 @@ def insert_citation_to_db(message: discord.Message):
     :param message: The message to process
     :return: None
     """
+    # Checking if the message start with the string "`no-saving`"
+    # This is used to prevent saving messages that are not citations
+    if message.content.startswith("`no-saving`"):
+        return
+
     # Getting the citation ID
     citation_id = message.id
 
@@ -69,6 +74,11 @@ def edit_citation_in_db(message: discord.Message):
     :param message: The message to process
     :return: None
     """
+    # Checking if the message start with the string "`no-saving`"
+    # This is used to prevent saving messages that are not citations
+    if message.content.startswith("`no-saving`"):
+        return
+
     # Getting the citation ID
     citation_id = message.id
 
