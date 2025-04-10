@@ -75,7 +75,7 @@ def get_random_color_seeded(seed: str):
 def setup_citation_embed(citation):
     """
     This function sets up the citation embed.
-    :param citation:
+    :param citation: The citation data
     :return: The citation embed and the mentions string
     """
     # Preparing the mentions string
