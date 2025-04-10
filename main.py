@@ -142,7 +142,7 @@ async def get_random_citation(interaction: discord.Interaction):
     embed.timestamp = citation["timestamp"]
 
     # Sending the embed as a response to the interaction
-    await interaction.response.send_message(embed=embed)
+    await interaction.response.send_message("- "+all_mentions_string+"\n", embed=embed)
 
 
 @client.tree.command(name="setup_server", description="Setting up the server settings. Only for administrators", guild=GUILD_ID)
