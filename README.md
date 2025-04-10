@@ -65,7 +65,7 @@ __This command is only available to the administrators.__
 
 This command will set up the server and the channel where it'll find the citations.
 
-### `/updating_database`
+### `/update_database`
 __This command is only available to the administrators.__
 
 This command will update the database with the citations from the channel.
