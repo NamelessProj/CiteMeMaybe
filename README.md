@@ -73,6 +73,11 @@ This command let you get a random citation from the database or from a specific 
 #### Parameters:
 - `user`: _optional_
 
+### `/get_a_citation`
+This command let you get a specific citation from the database using an id.
+#### Parameters:
+- `citation_id`: int
+
 ### `/how_many`
 This command let you get the number of citations in the database or the number of citations from a specific user.
 #### Parameters:
