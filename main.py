@@ -4,8 +4,7 @@ from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 
-from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, \
-    get_citation_count
+from database import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, get_citation_count, get_random_citation_from_user
 from server_settings import setup_server_settings, get_server_settings
 from utils import get_random_color_seeded
 
@@ -118,15 +117,23 @@ async def updating_database(interaction: discord.Interaction):
 
 
 @client.tree.command(name="random_citation", description="Getting a random citation", guild=GUILD_ID)
-async def get_random_citation(interaction: discord.Interaction):
+@app_commands.describe(user="The user to get the citation for")
+async def get_random_citation(interaction: discord.Interaction, user: discord.User = None):
     # Getting the guild ID from the interaction
     guild_id = interaction.guild.id
 
     # Getting a random citation from the database
-    citation = get_random_citation_from_db(guild_id)
+    if user is None:
+        citation = get_random_citation_from_db(guild_id)
+    else:
+        citation = get_random_citation_from_user(guild_id, user.id)
 
-    # Checking if the citation is None
-    if citation is None:
+    # Checking if there are a citation
+    if citation is None and user is not None:
+        error_embed = discord.Embed(title="The user has no citations", description=f"Sorry, I couldn't find any citations for {user.mention}", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+        return
+    else:
         error_embed = discord.Embed(title="No citations found", description="Sorry, I couldn't find any citations.", color=discord.Color.red())
         await interaction.response.send_message(embed=error_embed)
         return
