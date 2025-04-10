@@ -26,7 +26,6 @@ To be able to use this exemple bot, you'll need a `.env` file.
 ```env
 BOT_TOKEN=Your_Bot_Token
 GUILD_ID=Your_Server_Id
-CHANNEL_ID=The_Id_Of_Your_Citation_Channel
 
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.3xq4j.mongodb.net/?retryWrites=true&w=majority
 MONGO_DB_NAME=your_database_name
@@ -34,8 +33,6 @@ MONGO_DB_NAME=your_database_name
 The `BOT_TOKEN` will be used to connect the bot to your server.
 
 The `GUILD_ID` will be used to get the server where the bot is connected and to get the channel where the citations are.
-
-The `CHANNEL_ID` will be used to gather the citations from the channel and save them in the database.
 
 The `MONGO_URI` will be used to connect to your mongoDB database.
 
