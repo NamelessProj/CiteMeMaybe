@@ -27,12 +27,16 @@ To be able to use this exemple bot, you'll need a `.env` file.
 BOT_TOKEN=Your_Bot_Token
 GUILD_ID=Your_Server_Id
 
+PYTHON_ENV=dev
+
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.3xq4j.mongodb.net/?retryWrites=true&w=majority
 MONGO_DB_NAME=your_database_name
 ```
 The `BOT_TOKEN` will be used to connect the bot to your server.
 
 The `GUILD_ID` will be used to get the server where the bot is connected and to get the channel where the citations are.
+
+The `PYTHON_ENV` will be used to set the environment of the bot. It can be `dev` or `prod`. If you set it to `dev`, the bot will be only available for you. If you set it to `prod`, the bot will be available for everyone.
 
 The `MONGO_URI` will be used to connect to your mongoDB database.
 
