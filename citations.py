@@ -2,7 +2,7 @@ import discord
 
 from constants import CONSTANTS
 from database import get_database
-from utils import replacing_mentions, remove_mentions, extract_mentions
+from utils import replacing_mentions, remove_mentions, extract_mentions, extract_mentions_string
 
 
 def insert_citation_to_db(message: discord.Message):
@@ -36,6 +36,8 @@ def insert_citation_to_db(message: discord.Message):
     # Extracting mentions from the message
     all_mentions = extract_mentions(message)
 
+    all_mentions_string = extract_mentions_string(message) if len(all_mentions) == 0 else []
+
     # Preparing the citation data
     citation_data = {
         "guild_id": message.guild.id,
@@ -48,6 +50,7 @@ def insert_citation_to_db(message: discord.Message):
         "content": content,
         "content_without_mentions": content_without_mentions,
         "mentions": all_mentions,
+        "mentions_string": all_mentions_string,
         "timestamp": message.created_at
     }
 
@@ -64,6 +67,8 @@ def edit_citation_in_db(message: discord.Message):
     # Checking if the message start with the string "`no-saving`"
     # This is used to prevent saving messages that are not citations
     if message.content.startswith(CONSTANTS["no_saving"]):
+        # If the message starts with "`no-saving`", we delete the citation from the database
+        delete_citation_from_db(message.id)
         return
 
     # Getting the citation ID
@@ -82,13 +87,18 @@ def edit_citation_in_db(message: discord.Message):
     # Extracting mentions from the message
     all_mentions = extract_mentions(message)
 
+    all_mentions_string = extract_mentions_string(message) if len(all_mentions) == 0 else []
+
     # Preparing the citation data
     citation_data = {
         "content": content,
         "content_without_mentions": content_without_mentions,
         "mentions": all_mentions,
+        "mentions_string": all_mentions_string,
         "timestamp": message.created_at
     }
+
+    print(citation_data)
 
     # Updating the citation data in the database
     collection.update_one({"citation_id": citation_id}, {"$set": citation_data})
