@@ -45,6 +45,7 @@ class Client(commands.Bot):
             # Inserting the citation to the database
             insert_citation_to_db(message)
 
+    @commands.Cog.listener(name="on_message_edit")
     async def on_message_edit(self, before, after):
         # Ignore messages from the bot itself
         if before.author == self.user:
@@ -61,6 +62,7 @@ class Client(commands.Bot):
             # Inserting the citation to the database
             edit_citation_in_db(after)
 
+    @commands.Cog.listener(name="on_message_delete")
     async def on_message_delete(self, message):
         # Ignore messages from the bot itself
         if message.author == self.user:
