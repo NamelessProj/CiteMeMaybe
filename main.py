@@ -141,8 +141,10 @@ async def get_random_citation(interaction: discord.Interaction, user: discord.Us
 
     embed = setup_citation_embed(citation)
 
+    text_mention = embed["all_mentions_string"] if len(embed["all_mentions_string"]) > 0 else "no mentions found"
+
     # Sending the embed as a response to the interaction
-    await interaction.response.send_message("- "+embed["all_mentions_string"]+"\n", embed=embed["embed"])
+    await interaction.response.send_message(f"- {text_mention}\n", embed=embed["embed"])
 
 
 @client.tree.command(name="how_many", description="Getting the number of citations total or for a specific user", guild=GUILD_ID)
