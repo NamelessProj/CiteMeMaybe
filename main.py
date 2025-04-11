@@ -14,7 +14,7 @@ from utils import setup_citation_embed
 load_dotenv()
 
 # Getting the guild ID from the environment variable
-GUILD_ID = discord.Object(id=os.getenv("GUILD_ID"))
+GUILD_ID = discord.Object(id=os.getenv("GUILD_ID")) if os.getenv("PYTHON_ENV") == "dev" else None
 
 # Define the bot client
 class Client(commands.Bot):
@@ -24,7 +24,8 @@ class Client(commands.Bot):
         # Syncing the commands with the guild
         try:
             synced = await self.tree.sync(guild=GUILD_ID)
-            print(f'Synced {len(synced)} commands to guild {GUILD_ID.id}')
+            display_id = GUILD_ID.id if GUILD_ID else "global"
+            print(f'Synced {len(synced)} commands to guild {display_id}')
 
         except Exception as e:
             print(f'Error syncing commands: {e}')
