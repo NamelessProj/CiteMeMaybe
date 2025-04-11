@@ -282,8 +282,8 @@ async def setup_server(interaction: discord.Interaction, citation_channel: disco
     await interaction.response.send_message(embed=success_embed)
 
 
-@client.tree.command(name="exemple", description="Getting an example on how to write a citation", guild=GUILD_ID)
-async def get_exemple(interaction: discord.Interaction):
+@client.tree.command(name="example", description="Getting an example on how to write a citation", guild=GUILD_ID)
+async def get_example(interaction: discord.Interaction):
     # Getting the string for not saving a message
     no_saving = CONSTANTS["no_saving"]
 
