@@ -177,12 +177,14 @@ def get_citation_from_db(guild_id: int, citation_id: int):
     return citation
 
 
-def get_citation_count(guild_id: int, user_id: int = None):
+def get_citation_count(guild_id: int, user_id: int = None, is_auther: bool = False, thousands_separators: str = " "):
     """
     This function gets the count of citations in the database or for a specific user (in mentions).
     :param guild_id: The ID of the guild
     :param user_id: The ID of the user (optional)
-    :return: The count of citations
+    :param is_auther: If True, count the citations of the author (optional)
+    :param thousands_separators: The thousands separators to use (default is space)
+    :return: A dictionary with the citation count and the formatted number
     """
     # Getting the database and collection
     db = get_database()
@@ -191,9 +193,15 @@ def get_citation_count(guild_id: int, user_id: int = None):
     # Checking if the user ID is provided
     if user_id:
         # Getting the count of citations for the user
-        count = collection.count_documents({"guild_id": guild_id, "mentions.id": user_id})
+        count = collection.count_documents({"guild_id": guild_id, "mentions.id": user_id}) if not is_auther else collection.count_documents({"guild_id": guild_id, "author.id": user_id})
     else:
         # Getting the count of all citations
         count = collection.count_documents({"guild_id": guild_id})
 
-    return count
+    # Formatting the citation count with spaces instead of commas for thousands separators
+    count_str = f"{count:,}".replace(",", thousands_separators)
+
+    return {
+        "number": count,
+        "formated_number": count_str
+    }
