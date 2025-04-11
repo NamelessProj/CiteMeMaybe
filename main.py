@@ -232,6 +232,22 @@ async def setup_server(interaction: discord.Interaction, citation_channel: disco
     await interaction.response.send_message(embed=success_embed)
 
 
+@client.tree.command(name="exemple", description="Getting an example on how to write a citation", guild=GUILD_ID)
+async def get_exemple(interaction: discord.Interaction):
+    # Getting the string for not saving a message
+    no_saving = CONSTANTS["no_saving"]
+
+    # Creating an embed with the example information
+    text = "\nIf there's one mention:\n```This is an example of a citation.\n\n- @mention```\n\nIf there's more than one mention:\n```-I'm the first one to talk.\n-And me the second one\n-Don't forget me I'm the third\n\n- @mention1, @mention2, @mention3```"
+    embed = discord.Embed(title="How to write a citation", description=text, color=discord.Color.blue())
+    embed.add_field(name="", value="")
+    embed.set_footer(text=f"To not save a message, start the message with {no_saving}. You have to put it in a code block!")
+
+    # Sending the embed as a response to the interaction
+    await interaction.response.send_message(embed=embed)
+
+
+
 @client.tree.command(name="help", description="Getting help", guild=GUILD_ID)
 async def help_command(interaction: discord.Interaction):
     # Getting the string for not saving a message
