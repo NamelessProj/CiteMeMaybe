@@ -39,6 +39,24 @@ def extract_mentions(message: discord.Message):
     return result
 
 
+def extract_mentions_string(message: discord.Message):
+    """
+    This function extracts mentions from the message and returns them as a string.
+    :param message: The message to process
+    :return: A list of mentions as strings
+    """
+    result = []
+
+    # Extracting mentions from the message
+    pattern = r"-(\s*@?\w+)+$"
+    mentions = re.findall(pattern, message.content)
+    for mention in mentions:
+        mention = mention.replace("-", "").strip()
+        result.append(mention)
+
+    return result
+
+
 def remove_mentions(message: discord.Message):
     """
     This function removes mentions from the message.
@@ -47,9 +65,16 @@ def remove_mentions(message: discord.Message):
     """
     content = message.content
 
-    # Removing mentions
-    for mention in message.mentions:
-        content = content.replace(f'<@{mention.id}>', '')
+    # Extracting mentions from the message
+    if len(message.mentions) == 0:
+        pattern = r"-(\s*@?\w+)+$"
+        mentions = re.findall(pattern, content)
+        for mention in mentions:
+            mention = mention.replace("-", "").strip()
+            content = content.replace(mention, '')
+    else:
+        for mention in message.mentions:
+            content = content.replace(f'<@{mention.id}>', '')
 
     # Removing last "-" and all ","
     content = re.sub(r'-(\s*,?)*$', '', content, 1)
