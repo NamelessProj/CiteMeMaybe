@@ -241,6 +241,8 @@ async def get_exemple(interaction: discord.Interaction):
     text = "\nIf there's one mention:\n```This is an example of a citation.\n\n- @mention```\n\nIf there's more than one mention:\n```-I'm the first one to talk.\n-And me the second one\n-Don't forget me I'm the third\n\n- @mention1, @mention2, @mention3```"
     embed = discord.Embed(title="How to write a citation", description=text, color=discord.Color.blue())
     embed.add_field(name="", value="")
+    embed.add_field(name="Never", value="You should never mention anyone in the text, only in the end of the message.", inline=False)
+    embed.add_field(name="", value="")
     embed.set_footer(text=f"To not save a message, start the message with {no_saving}. You have to put it in a code block!")
 
     # Sending the embed as a response to the interaction
