@@ -105,9 +105,14 @@ def setup_citation_embed(citation):
     """
     # Preparing the mentions string
     all_mentions_string = ""
-    for mention in citation["mentions"]:
-        mention_id = mention["id"]
-        all_mentions_string += f"<@{mention_id}>, "
+
+    if len(citation["mentions"]) == 0:
+        for mention in citation["mentions_string"]:
+            all_mentions_string += f"{mention}, "
+    else:
+        for mention in citation["mentions"]:
+            mention_id = mention["id"]
+            all_mentions_string += f"<@{mention_id}>, "
 
     # Removing the last comma and space
     all_mentions_string = all_mentions_string[:-2]
@@ -120,6 +125,7 @@ def setup_citation_embed(citation):
 
     # Creating an embed with the citation data
     embed = discord.Embed(title="Citation", description=citation["content_without_mentions"], color=color)
+    embed.add_field(name="", value="", inline=False)
     embed.add_field(name="Who said it?", value=all_mentions_string, inline=True)
     embed.add_field(name="Who write it?", value=f"<@{author_id}>", inline=True)
     embed.set_footer(text=f"Citation ID: {citation_id}")
