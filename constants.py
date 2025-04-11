@@ -14,6 +14,10 @@ CONSTANTS = {
             "description": "Get the number of citations total or for a specific user."
         },
         {
+            "name": "how_many_written_by",
+            "description": "Get the number of citations written by a specific user."
+        },
+        {
             "name": "get_a_citation",
             "description": "Get a citation from the database by ID."
         },
