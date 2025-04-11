@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from citations import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, \
     get_citation_count, get_random_citation_from_user, get_citation_from_db
 from constants import CONSTANTS
+from database import get_database
 from server_settings import setup_server_settings, get_server_settings
 from utils import setup_citation_embed
 
@@ -35,8 +36,10 @@ class Client(commands.Bot):
         if message.author == self.user:
             return
 
+        db = get_database()
+
         # Getting the server settings from the database
-        server_settings = get_server_settings(message.guild.id)
+        server_settings = get_server_settings(db, message.guild.id)
 
         if server_settings is None:
             return
@@ -44,7 +47,7 @@ class Client(commands.Bot):
         # Checking if the message is in the channel specified in the environment variable
         if message.channel.id == server_settings["citation_channel_id"]:
             # Inserting the citation to the database
-            insert_citation_to_db(message)
+            insert_citation_to_db(db, message)
 
     @commands.Cog.listener(name="on_message_edit")
     async def on_message_edit(self, before, after):
@@ -52,8 +55,10 @@ class Client(commands.Bot):
         if before.author == self.user:
             return
 
+        db = get_database()
+
         # Getting the server settings from the database
-        server_settings = get_server_settings(after.guild.id)
+        server_settings = get_server_settings(db, after.guild.id)
 
         if server_settings is None:
             return
@@ -61,7 +66,7 @@ class Client(commands.Bot):
         # Checking if the message is in the channel specified in database
         if before.channel.id == server_settings["citation_channel_id"]:
             # Inserting the citation to the database
-            edit_citation_in_db(after)
+            edit_citation_in_db(db, after)
 
     @commands.Cog.listener(name="on_message_delete")
     async def on_message_delete(self, message):
@@ -69,8 +74,10 @@ class Client(commands.Bot):
         if message.author == self.user:
             return
 
+        db = get_database()
+
         # Getting the server settings from the database
-        server_settings = get_server_settings(message.guild.id)
+        server_settings = get_server_settings(db, message.guild.id)
 
         if server_settings is None:
             return
@@ -78,7 +85,7 @@ class Client(commands.Bot):
         # Checking if the message is in the channel specified in the environment variable
         if message.channel.id == server_settings["citation_channel_id"]:
             # Deleting the citation from the database
-            delete_citation_from_db(message.id)
+            delete_citation_from_db(db, message.id)
 
 
 # Define the intents
@@ -93,8 +100,10 @@ async def update_database(interaction: discord.Interaction):
     # Letting Discord know that we are processing the command
     await interaction.response.defer()
 
+    db = get_database()
+
     # Getting the server settings from the database
-    server_settings = get_server_settings(interaction.guild.id)
+    server_settings = get_server_settings(db, interaction.guild.id)
 
     if server_settings is None:
         error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
@@ -111,7 +120,7 @@ async def update_database(interaction: discord.Interaction):
     # Fetching messages from the channel history
     msgs = [message async for message in channel.history(limit=server_settings["history_limit"])]
     for message in msgs:
-        insert_citation_to_db(message)
+        insert_citation_to_db(db, message)
 
     # Sending a response to the interaction at the end of the command
     success_embed = discord.Embed(title="All the messages were found", description="I have fetched all the messages from the channel.", color=discord.Color.green())
@@ -124,11 +133,13 @@ async def get_random_citation(interaction: discord.Interaction, user: discord.Us
     # Getting the guild ID from the interaction
     guild_id = interaction.guild.id
 
+    db = get_database()
+
     # Getting a random citation from the database
     if user is None:
-        citation = get_random_citation_from_db(guild_id)
+        citation = get_random_citation_from_db(db, guild_id)
     else:
-        citation = get_random_citation_from_user(guild_id, user.id)
+        citation = get_random_citation_from_user(db, guild_id, user.id)
 
     # Checking if there are a citation
     if citation is None and user is not None:
@@ -154,8 +165,10 @@ async def how_many(interaction: discord.Interaction, user: discord.User = None):
     # Getting the guild ID from the interaction
     guild_id = interaction.guild.id
 
+    db = get_database()
+
     # Getting the server settings from the database
-    server_settings = get_server_settings(guild_id)
+    server_settings = get_server_settings(db, guild_id)
 
     if server_settings is None:
         error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
@@ -163,7 +176,7 @@ async def how_many(interaction: discord.Interaction, user: discord.User = None):
         return
 
     # Getting the number of citations from the database
-    citation_count = get_citation_count(guild_id, user.id if user else None)
+    citation_count = get_citation_count(db, guild_id, user.id if user else None)
 
     # Determining the correct form of the word "citation" based on the count
     citation_str = "citations" if citation_count["number"] > 1 else "citation"
@@ -186,8 +199,10 @@ async def how_many_written_by(interaction: discord.Interaction, user: discord.Us
     # Getting the guild ID from the interaction
     guild_id = interaction.guild.id
 
+    db = get_database()
+
     # Getting the server settings from the database
-    server_settings = get_server_settings(guild_id)
+    server_settings = get_server_settings(db, guild_id)
 
     if server_settings is None:
         error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
@@ -195,7 +210,7 @@ async def how_many_written_by(interaction: discord.Interaction, user: discord.Us
         return
 
     # Getting the number of citations from the database
-    citation_count = get_citation_count(guild_id, user.id if user else interaction.user.id, True)
+    citation_count = get_citation_count(db, guild_id, user.id if user else interaction.user.id, True)
 
     # Determining the correct form of the word "citation" based on the count
     citation_str = "citations" if citation_count["number"] > 1 else "citation"
@@ -224,11 +239,13 @@ async def get_a_citation(interaction: discord.Interaction, citation_id: str):
         await interaction.response.send_message(embed=error_embed)
         return
 
+    db = get_database()
+
     # Converting the citation ID to an integer
     citation_id = int(citation_id)
 
     # Getting a citation from the database
-    citation = get_citation_from_db(guild_id, citation_id)
+    citation = get_citation_from_db(db, guild_id, citation_id)
 
     # Checking if there are a citation
     if citation is None:
@@ -249,8 +266,10 @@ async def setup_server(interaction: discord.Interaction, citation_channel: disco
     # Getting the guild ID from the interaction
     guild_id = interaction.guild.id
 
+    db = get_database()
+
     # Setting up the server settings in the database
-    server_settings = setup_server_settings(guild_id, citation_channel.id)
+    server_settings = setup_server_settings(db, guild_id, citation_channel.id)
 
     # Checking if the server settings were set up successfully
     if server_settings is None:
