@@ -115,6 +115,9 @@ When a message is edited, the bot will check if the message is a citation and if
 Before sending a message in the channel, add at the beginning of the message `no-saving`. It has to be in a code block.
 
 ## 🎮 Commands
+### `/example`
+This command give you an example of how to write a citation.
+
 ### `/help`
 This command will give you a list of all the commands available.
 
@@ -128,7 +131,7 @@ __This command is only available to the administrators.__
 
 This command will update the database with the citations from the channel.
 
-### `/get_random_citation`
+### `/random_citation`
 This command let you get a random citation from the database or from a specific user.
 #### Parameters:
 - `user`: _optional_
@@ -140,5 +143,10 @@ This command let you get a specific citation from the database using an id.
 
 ### `/how_many`
 This command let you get the number of citations in the database or the number of citations from a specific user.
+#### Parameters:
+- `user`: _optional_
+
+### `/how_many_written_by`
+This command let you get the number of citations written by a specific user. By default, it will get the number of citations written by you.
 #### Parameters:
 - `user`: _optional_
