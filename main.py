@@ -165,17 +165,48 @@ async def how_many(interaction: discord.Interaction, user: discord.User = None):
     # Getting the number of citations from the database
     citation_count = get_citation_count(guild_id, user.id if user else None)
 
-    # Formatting the citation count with spaces instead of commas for thousands separators
-    count_str = f"{citation_count:,}".replace(",", " ")
-
     # Determining the correct form of the word "citation" based on the count
-    citation_str = "citations" if citation_count > 1 else "citation"
+    citation_str = "citations" if citation_count["number"] > 1 else "citation"
+
+    formated_number = citation_count["formated_number"]
 
     # Getting the number of citations from the database
     if user is None:
-        response_message = f"There are **{count_str}** {citation_str} in total."
+        response_message = f"There are **{formated_number}** {citation_str} in total."
     else:
-        response_message = f"There are **{count_str}** {citation_str} for {user.mention}."
+        response_message = f"There are **{formated_number}** {citation_str} for {user.mention}."
+
+    # Sending a response to the interaction at the end of the command
+    await interaction.response.send_message(response_message)
+
+
+@client.tree.command(name="how_many_written_by", description="Getting the number of citations written by a specific user", guild=GUILD_ID)
+@app_commands.describe(user="The user to get the number of citations for. By default, it's the user who wrote the command")
+async def how_many_written_by(interaction: discord.Interaction, user: discord.User = None):
+    # Getting the guild ID from the interaction
+    guild_id = interaction.guild.id
+
+    # Getting the server settings from the database
+    server_settings = get_server_settings(guild_id)
+
+    if server_settings is None:
+        error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
+        await interaction.response.send_message(embed=error_embed)
+        return
+
+    # Getting the number of citations from the database
+    citation_count = get_citation_count(guild_id, user.id if user else interaction.user.id, True)
+
+    # Determining the correct form of the word "citation" based on the count
+    citation_str = "citations" if citation_count["number"] > 1 else "citation"
+
+    formated_number = citation_count["formated_number"]
+
+    # Getting the number of citations from the database
+    if user is None:
+        response_message = f"There are **{formated_number}** {citation_str} written by you."
+    else:
+        response_message = f"There are **{formated_number}** {citation_str} written by {user.mention}."
 
     # Sending a response to the interaction at the end of the command
     await interaction.response.send_message(response_message)
