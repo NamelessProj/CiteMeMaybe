@@ -9,12 +9,14 @@ CiteMeMaybe automatically logs every message from a designated channel and store
   * [🚗 Automations](#-automations)
   * [❌ How to prevent messages from being saved](#-how-to-prevent-messages-from-being-saved)
   * [🎮 Commands](#-commands)
+    * [`/example`](#example)
     * [`/help`](#help)
     * [`/setup_server`](#setup_server)
     * [`/update_database`](#update_database)
-    * [`/get_random_citation`](#get_random_citation)
+    * [`/random_citation`](#random_citation)
     * [`/get_a_citation`](#get_a_citation)
     * [`/how_many`](#how_many)
+    * [`/how_many_written_by`](#how_many_written_by)
 
 ## 🛠️ Features:
 __Auto-log messages__ from a specified channel as citations.
