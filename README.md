@@ -1,6 +1,21 @@
 # CiteMeMaybe - 🎤 Save the legendary moments.
 CiteMeMaybe automatically logs every message from a designated channel and stores it as a citation. Whether it’s hilarious, out of pocket, or pure gold—you’ll never lose a quote again.
 
+* [CiteMeMaybe - 🎤 Save the legendary moments.](#citememaybe----save-the-legendary-moments)
+  * [🛠️ Features:](#-features)
+  * [🤝 Perfect for:](#-perfect-for)
+  * [📊 .env](#-env)
+  * [🤖 How to run the bot](#-how-to-run-the-bot)
+  * [🚗 Automations](#-automations)
+  * [❌ How to prevent messages from being saved](#-how-to-prevent-messages-from-being-saved)
+  * [🎮 Commands](#-commands)
+    * [`/help`](#help)
+    * [`/setup_server`](#setup_server)
+    * [`/update_database`](#update_database)
+    * [`/get_random_citation`](#get_random_citation)
+    * [`/get_a_citation`](#get_a_citation)
+    * [`/how_many`](#how_many)
+
 ## 🛠️ Features:
 __Auto-log messages__ from a specified channel as citations.
 
@@ -42,6 +57,25 @@ The `MONGO_URI` will be used to connect to your mongoDB database.
 
 The `MONGO_DB_NAME` will be used to get the database name where the citations will be saved.
 
+> [!note]
+> ### How to get your Bot token ?
+> To get your bot token, you'll need to go to the [Discord Developer Portal](https://discord.com/developers/applications).
+> You'll have to create a `New Application` and in the `Bot` page, you'll have to:
+> - Turn on `Presence Intent`
+> - Turn on `Server Members Intent`
+> - Turn on `Message Content Intent`
+> - Check `Administartor` in the `Bot Permissions` that way the bot can do anything. _(Make sure to trust the code)_
+> 
+> Then on the `OAuth2` page, in the `OAuth2 URL Generator` part, check `bot`, copy the url and pasted it in your browser.
+> 
+> Once your bot on the server you wanted it to be, back on the `Discrod Developer Portal`, in the `Bot` page, you'll find a button `Reset Token`. Click on it and then your token will be displayed. __Make sure to save it, it'll be showed one time only__.
+
+> [!note]
+> ### How to get the ID of your Server ?
+> On Discord, you'll have to go to your `user settings` and in the `Advanced` tab. In there, you'll have to turn on the `Developer Mode`.
+>
+> Then make a right click on the server you want the bot in and at the bottom of the context menu, you'll find the possibility to copy the ID of the server.
+
 ## 🤖 How to run the bot
 1. Clone the repository
 ```bash
@@ -62,6 +96,13 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+5. Create a `.env` file in the root of the project and add everything from the [`.env.exemple`](/.env.exemple) file. You can also check the [📊 .env](#-env) section for more information.
+6. Run the bot
+```bash
+python main.py
+```
+
+Everytime you want to run the bot, you have to activate the virtual environment and run the bot _(step 3 and 6)_.
 
 ## 🚗 Automations
 Every time a message is sent in the channel, the bot will check if the message is a citation and if it is, it will save it in the database.
