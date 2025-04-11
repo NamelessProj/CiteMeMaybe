@@ -2,6 +2,10 @@ CONSTANTS = {
     "no_saving": "`no-saving`",
     "all_commands": [
         {
+            "name": "exemple",
+            "description": "Get an exemple on how to write a citation."
+        },
+        {
             "name": "random_citation",
             "description": "Get a random citation from the database or for a specific user."
         },
