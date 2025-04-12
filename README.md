@@ -2,8 +2,8 @@
 CiteMeMaybe automatically logs every message from a designated channel and stores it as a citation. Whether it’s hilarious, out of pocket, or pure gold—you’ll never lose a quote again.
 
 * [CiteMeMaybe - 🎤 Save the legendary moments.](#citememaybe----save-the-legendary-moments)
-  * [🛠️ Features:](#-features)
-  * [🤝 Perfect for:](#-perfect-for)
+  * [🛠️ Features](#-features)
+  * [🤝 Perfect for](#-perfect-for)
   * [📊 .env](#-env)
   * [🤖 How to run the bot](#-how-to-run-the-bot)
   * [🚗 Automations](#-automations)
@@ -18,7 +18,7 @@ CiteMeMaybe automatically logs every message from a designated channel and store
     * [`/how_many`](#how_many)
     * [`/how_many_written_by`](#how_many_written_by)
 
-## 🛠️ Features:
+## 🛠️ Features
 __Auto-log messages__ from a specified channel as citations.
 
 __Random citation__ generator (from anyone or specific users).
@@ -27,7 +27,7 @@ __Stats commands__ – total citations, user-specific counts, and more.
 
 __Citation lookup__ by ID, in case someone really wants to deny it.
 
-## 🤝 Perfect for:
+## 🤝 Perfect for
 Friend groups who say way too much.
 
 Servers that run on inside jokes.
