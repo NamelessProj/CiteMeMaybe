@@ -13,6 +13,7 @@ CiteMeMaybe automatically logs every message from a designated channel and store
     * [`/help`](#help)
     * [`/setup_server`](#setup_server)
     * [`/update_database`](#update_database)
+    * [`/top`](#top)
     * [`/random_citation`](#random_citation)
     * [`/get_a_citation`](#get_a_citation)
     * [`/how_many`](#how_many)
@@ -132,6 +133,11 @@ This command will set up the server and the channel where it'll find the citatio
 __This command is only available to the administrators.__
 
 This command will update the database with the citations from the channel.
+
+### `/top`
+This command let you get the top users who said the most citations and who wrote the most citations. By default, it will get the top 5 users.
+#### Parameters:
+- `number`: _optional_
 
 ### `/random_citation`
 This command let you get a random citation from the database or from a specific user.
