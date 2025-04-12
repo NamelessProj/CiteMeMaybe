@@ -22,6 +22,10 @@ CONSTANTS = {
             "description": "Get a citation from the database by ID."
         },
         {
+            "name": "top",
+            "description": "Get the top users with the most citations said and written."
+        },
+        {
             "name": "setup_server",
             "description": "Set up the server settings.\n**Only available for administrators.**"
         },
