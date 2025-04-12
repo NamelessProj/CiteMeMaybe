@@ -218,10 +218,7 @@ async def how_many_written_by(interaction: discord.Interaction, user: discord.Us
     formated_number = citation_count["formated_number"]
 
     # Getting the number of citations from the database
-    if user is None:
-        response_message = f"There are **{formated_number}** {citation_str} written by you."
-    else:
-        response_message = f"There are **{formated_number}** {citation_str} written by {user.mention}."
+    response_message = f"There are **{formated_number}** {citation_str} written by you." if user else f"There are **{formated_number}** {citation_str} written by {user.mention}."
 
     # Sending a response to the interaction at the end of the command
     await interaction.response.send_message(response_message)
