@@ -5,11 +5,11 @@ from discord import app_commands
 from dotenv import load_dotenv
 
 from citations import insert_citation_to_db, get_random_citation_from_db, delete_citation_from_db, edit_citation_in_db, \
-    get_citation_count, get_random_citation_from_user, get_citation_from_db
+    get_citation_count, get_random_citation_from_user, get_citation_from_db, get_all_citations_from_db
 from constants import CONSTANTS
 from database import get_database
 from server_settings import setup_server_settings, get_server_settings
-from utils import setup_citation_embed
+from utils import setup_citation_embed, get_top_user_citations_said, get_top_user_citations_written
 
 # Load environment variables
 load_dotenv()
@@ -94,7 +94,7 @@ intents.message_content = True
 client = Client(command_prefix="!", intents=intents)
 
 
-@client.tree.command(name="update_database", description="Updating the database with all the messages from the channel", guild=GUILD_ID)
+@client.tree.command(name="save_new_citations", description="Updating the database with all the messages from the channel", guild=GUILD_ID)
 @app_commands.checks.has_permissions(administrator=True)
 async def update_database(interaction: discord.Interaction):
     # Letting Discord know that we are processing the command
@@ -259,6 +259,45 @@ async def get_a_citation(interaction: discord.Interaction, citation_id: str):
     await interaction.response.send_message("- "+embed["all_mentions_string"]+"\n", embed=embed["embed"])
 
 
+@client.tree.command(name="top", description="Getting the top users with the most citations", guild=GUILD_ID)
+@app_commands.describe(number="The number of users to get")
+async def get_top_users(interaction: discord.Interaction, number: int = 5):
+    await interaction.response.defer()
+
+    # Getting the guild ID from the interaction
+    guild_id = interaction.guild.id
+
+    db = get_database()
+
+    # Getting the server settings from the database
+    server_settings = get_server_settings(db, guild_id)
+
+    if server_settings is None:
+        error_embed = discord.Embed(title="Server settings not found", description="Sorry, I couldn't find the server settings. Please set them up using the /setup_server command.", color=discord.Color.red())
+        await interaction.followup.send(embed=error_embed)
+        return
+
+    # Getting all the users that have citations
+    all_citations = get_all_citations_from_db(db, guild_id)
+
+    # Getting the top users with the most citations said
+    top_users_citations_said = get_top_user_citations_said(number, all_citations)
+
+    # Getting the top users with the most citations written
+    top_users_citations_written = get_top_user_citations_written(number, all_citations)
+
+    # Creating an embed to display the top users
+    embed = discord.Embed(title="Who's at the top?", description="Top with the most citations...", color=discord.Color.blue())
+
+    embed.add_field(name="", value="", inline=False)
+    embed.add_field(name="Said", value=top_users_citations_said, inline=True)
+    embed.add_field(name="", value="", inline=True)
+    embed.add_field(name="Written", value=top_users_citations_written, inline=True)
+
+    # Sending a response to the interaction at the end of the command
+    await interaction.followup.send(embed=embed)
+
+
 @client.tree.command(name="setup_server", description="Setting up the server settings. Only for administrators", guild=GUILD_ID)
 @app_commands.checks.has_permissions(administrator=True)
 @app_commands.describe(citation_channel="The channel in which the bot will gather citations")
@@ -297,7 +336,6 @@ async def get_example(interaction: discord.Interaction):
 
     # Sending the embed as a response to the interaction
     await interaction.response.send_message(embed=embed)
-
 
 
 @client.tree.command(name="help", description="Getting help", guild=GUILD_ID)
