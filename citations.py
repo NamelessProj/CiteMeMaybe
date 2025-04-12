@@ -179,6 +179,22 @@ def get_citation_from_db(db: Database[Mapping], guild_id: int, citation_id: int)
     return citation
 
 
+def get_all_citations_from_db(db: Database[Mapping], guild_id: int):
+    """
+    This function gets all citations from the database.
+    :param db: The database
+    :param guild_id: The ID of the guild
+    :return: A list of all citations
+    """
+    # Getting the collection
+    collection = db.get_collection('citation')
+
+    # Getting all citations from the database
+    citations = collection.find({"guild_id": guild_id})
+
+    return list(citations)
+
+
 def get_citation_count(db: Database[Mapping], guild_id: int, user_id: int = None, is_auther: bool = False, thousands_separators: str = " "):
     """
     This function gets the count of citations in the database or for a specific user (in mentions).
