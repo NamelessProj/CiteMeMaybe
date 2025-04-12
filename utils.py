@@ -144,7 +144,7 @@ def sort_citations(citations: dict, limit: int = 5):
     This function sorts the citations by timestamp.
     :param citations: The list of citations
     :param limit: The limit of citations to get
-    :return:
+    :return: The top users with the most citations
     """
     # Sorting the users by citation count
     sorted_users = sorted(citations.items(), key=lambda x: x[1], reverse=True)
