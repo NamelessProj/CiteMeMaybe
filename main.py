@@ -260,7 +260,7 @@ async def get_a_citation(interaction: discord.Interaction, citation_id: str):
 
 
 @client.tree.command(name="top", description="Getting the top users with the most citations", guild=GUILD_ID)
-@app_commands.describe(number="The number of users to get")
+@app_commands.describe(number="The number of users to get max (default 5)")
 async def get_top_users(interaction: discord.Interaction, number: int = 5):
     await interaction.response.defer()
 
