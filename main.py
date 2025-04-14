@@ -12,7 +12,7 @@ from server_settings import setup_server_settings, get_server_settings
 from utils import setup_citation_embed, get_top_user_citations_said, get_top_user_citations_written
 
 # Load environment variables
-load_dotenv()
+load_dotenv(verbose=True)
 
 # Getting the guild ID from the environment variable
 GUILD_ID = discord.Object(id=os.getenv("GUILD_ID")) if os.getenv("PYTHON_ENV") == "dev" else None
