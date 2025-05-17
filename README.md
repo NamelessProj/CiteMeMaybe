@@ -1,3 +1,12 @@
+<p align="center">
+<img src="https://img.shields.io/badge/Python-v.3.12.6-blue" alt="Python version"/>
+</p>
+
+<p align="center">
+<img src="https://img.shields.io/github/license/NamelessProj/CiteMeMaybe" alt="licence"/>
+<img src="https://img.shields.io/github/repo-size/NamelessProj/CiteMeMaybe" alt="repo size"/>
+</p>
+
 # CiteMeMaybe - 🎤 Save the legendary moments.
 CiteMeMaybe automatically logs every message from a designated channel and stores it as a citation. Whether it’s hilarious, out of pocket, or pure gold—you’ll never lose a quote again.
 
